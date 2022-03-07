@@ -2,9 +2,10 @@ const canvas = document.querySelector('#canvas')
 const canvasWidth = 1200
 const context = canvas.getContext('2d')
 const mariaImg = new Image()
-mariaImg.src = ('./images/character.png')
+mariaImg.src = ('./images/Girlrun.png')
 const backgroundImg = new Image()
 backgroundImg.src = ('./images/backgroundImg1.jpg')
+let gamespeed = 2
 
 //canvas.width = innerWidth 
 // canvas.height = innerHeight
@@ -48,6 +49,32 @@ class Player {
 
 const player = new Player()
 
+class Background {
+    constructor(x, y, image) {
+        this.position = {
+            x: x,
+            y: y
+        }
+        this.image = image
+        this.width = 1200
+        this.height = 553
+    }
+    
+    draw() {
+        context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
+    }
+}
+const background = new Background(0, 0, backgroundImg);
+
+// function handleBackground () {
+//     // if(background.x1 <= -background.width){
+
+//     //     background.x2 = background.width
+//     // } else {
+//     //     background.x1 -= gamespeed
+//     // }
+//     context.draw(backgroundImg, background.x1, background.y, background.width, background.height)
+// }
 
   
 
@@ -67,9 +94,8 @@ const player = new Player()
 function animate() {
     requestAnimationFrame(animate)
     context.clearRect(0, 0, canvas.width, canvas.height)
+    background.draw()
     player.update()
-    
-
 }
 
 animate()
@@ -80,6 +106,8 @@ addEventListener('keydown', function (event) {
         case'ArrowUp':
            if(player.velocity.y === 0)
            player.velocity.y -= 20
+           background.draw()
+
            break
 
         case 'ArrowRight':
@@ -112,19 +140,5 @@ addEventListener('keyup', function (event) {
     }   
 })
 
-const background = {
-    x1: 0,
-    x2: canvasWidth,
-    y: 0,
-    width: canvasWidth,
-    height: canvas.height
-}
-
-function handleBackground () {
-    if(background.x1 <= -background.width){
-
-        background.x2 = background.width
-    } else (background.x1 )
-}
 
 

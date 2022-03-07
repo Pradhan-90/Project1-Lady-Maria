@@ -3,10 +3,11 @@
 }
 
 body{
-    background-color: aqua;
+    background-color: rgb(27, 209, 233);
 }
 
 canvas{
-    border: 2px solid red;
+    border: 2px solid rgb(230, 222, 222);
+    
 }
 
