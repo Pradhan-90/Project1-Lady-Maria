@@ -40,6 +40,8 @@ class Player {
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
     }
 
+
+
     update() {
         this.draw()
         const newPosition = this.position.x + this.velocity.x
@@ -151,32 +153,44 @@ function drawScore() {
     context.fillText("Score: "+score, 8, 20);
 }
 
-function collisionDetection() {
+function collideWithPlayer(a) {
+    let aX = a.position.x
+    let aY = a.position.y
+    let playerX = player.position.x
+    let playerY = player.position.y
+    if (playerX + player.width >= aX && playerX <= aX + a.width && playerY + player.height >= aY && playerY <= aY + a.height) {
+        return true
+    } else {
+        return false
+    }
+}
+//
+function collisionWithCoin() {
     for (let x=0; x < coins.length; x++) {
         let coin = coins[x];
-        let coin_x = coin.position.x
-        let coin_y = coin.position.y
-        let player_x = player.position.x
-        let player_y = player.position.y
-        if (player_x + player.width >= coin_x && player_x <= coin_x + coin.width && player_y + player.height >= coin_y && player_y <= coin_y + coin.height){
+        if (collideWithPlayer(coin)) {
             score ++;
             coins.splice(x, 1);
             break;
         }
     }
-
-
-
-    // coins.forEach((coin) => {
-    //     let coin_x = coin.position.x
-    //     let coin_y = coin.position.y
-    //     let player_x = player.position.x
-    //     let player_y = player.position.y
-    //     if (player_x + player.width >= coin_x && player_x <= coin_x + coin.width && player_y + player.height >= coin_y && player_y <= coin_y + coin.height){
-    //         score ++
-    //     }
-    //   });
     drawScore()      
+}
+
+function gameOver() {
+    context.font = "16px Arial";
+    context.fillStyle = "#0095DD";
+    context.fillText("Game Over ", 300, 200);
+}
+
+function collisionWithObstacle() {
+    for (let x=0; x < obstacles.length; x++) {
+        let obstacle = obstacles[x];
+        if (collideWithPlayer(obstacle)) {
+            gameOver()
+            break;
+        }
+    }   
 }
 
 
@@ -213,7 +227,6 @@ function animate() {
     }
     // Keep only those coins that are in frame
     coins = coins.filter(item => (item.position.x > 0));
-    //coin.move()
      // for generating obstacles at random intervals
     for (let i = 0; i < obstacles.length; i++) {
         obstacles[i].draw()
@@ -223,9 +236,11 @@ function animate() {
     if (Math.random() > 0.99) {
       obstacles.push(new Obstacle(demon1Img))
     }
-    obstacles = obstacles.filter(item => (item.position.x > 0));
+    obstacles = obstacles.filter(item => (item.position.x > 0)); //to remove obstacles those are out of frame
 
-    collisionDetection()
+    collisionWithCoin()
+
+    collisionWithObstacle()
     
 }
 
