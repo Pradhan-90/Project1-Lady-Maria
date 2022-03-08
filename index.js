@@ -9,6 +9,8 @@ const coinImg = new Image()
 coinImg.src = ('./images/—Pngtree—golden\ coin\ money\ gold_6424143.png')
 const demon1Img = new Image()
 demon1Img.src = ('./images/demon2.png')
+const demon2Img = new Image()
+demon2Img.src = './images/2demon1.png'
 
 
 //canvas.width = innerWidth 
@@ -51,6 +53,7 @@ class Player {
             this.velocity.y = 0
             if (keys.right.pressed) {
                 background.move(-5)
+                //obstacle.move(-5)
             } else if (keys.left.pressed) {
                 background.move(5)
             }
@@ -96,8 +99,8 @@ const background = new Background(0, 0, backgroundImg);
 class Coin {
     constructor(x, y, image) {
         this.position = {
-            x: x,
-            y: y
+            x: 500,
+            y: 420
         } 
 
         this.image = image
@@ -109,19 +112,17 @@ class Coin {
         context.drawImage(this.image, this.position.x, this.position.y,this.width, this.height)    
     }
 
-    update() {
-        this.draw()
-    
-        
+    move(){
+        this.position. x += 4
     }
 }
 const coin = new Coin(0, 0, coinImg);
 
 class Obstacle {
-    constructor(x, y, image) {
+    constructor(image) {
         this.position = {
-            x: 500,
-            y: 160
+            x: 1200,
+            y: 200
         } 
 
         this.image = image
@@ -135,12 +136,13 @@ class Obstacle {
         context.drawImage(this.image, this.position.x, this.position.y,this.width, this.height) 
     }
 
-    update() {
-        this.draw()   
+    move(){
+        this.position. x -= 4
     }
+     
 }
 
-const obstacle = new Obstacle(0, 0, demon1Img)
+const obstacles = [new Obstacle(demon1Img)]
 
 
 
@@ -158,15 +160,25 @@ const keys = {
     }
 }
 
-
+let count = 0
 
 function animate() {
+    count++
+    console.log(count)
     requestAnimationFrame(animate)
     context.clearRect(0, 0, canvas.width, canvas.height)
     background.draw()
     player.update()
-    coin.update()
-    obstacle.update()
+    coin.draw()
+    //coin.move()
+    for (let i = 0; i < obstacles.length; i++) {
+        obstacles[i].draw()
+        obstacles[i].move()
+    }
+    
+    if (Math.random() > 0.99) {
+      obstacles.push(new Obstacle(demon1Img))
+    }
     
     
 }
