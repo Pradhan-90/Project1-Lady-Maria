@@ -97,10 +97,10 @@ class Background {
 const background = new Background(0, 0, backgroundImg);
 
 class Coin {
-    constructor(x, y, image) {
+    constructor(image) {
         this.position = {
-            x: 500,
-            y: 420
+            x: 1200,
+            y: Math.random() * 420
         } 
 
         this.image = image
@@ -113,16 +113,16 @@ class Coin {
     }
 
     move(){
-        this.position. x += 4
+        this.position.x -= 4 //to move coin in opposite direction
     }
 }
-const coin = new Coin(0, 0, coinImg);
+let coins = [new Coin(coinImg)];
 
 class Obstacle {
     constructor(image) {
         this.position = {
             x: 1200,
-            y: 200
+            y: Math.random() * 400
         } 
 
         this.image = image
@@ -137,14 +137,47 @@ class Obstacle {
     }
 
     move(){
-        this.position. x -= 4
+        this.position.x -= 4
     }
      
 }
 
-const obstacles = [new Obstacle(demon1Img)]
+let obstacles = [new Obstacle(demon1Img)]
+
+let score = 0
+function drawScore() {
+    context.font = "16px Arial";
+    context.fillStyle = "#0095DD";
+    context.fillText("Score: "+score, 8, 20);
+}
+
+function collisionDetection() {
+    for (let x=0; x < coins.length; x++) {
+        let coin = coins[x];
+        let coin_x = coin.position.x
+        let coin_y = coin.position.y
+        let player_x = player.position.x
+        let player_y = player.position.y
+        if (player_x + player.width >= coin_x && player_x <= coin_x + coin.width && player_y + player.height >= coin_y && player_y <= coin_y + coin.height){
+            score ++;
+            coins.splice(x, 1);
+            break;
+        }
+    }
 
 
+
+    // coins.forEach((coin) => {
+    //     let coin_x = coin.position.x
+    //     let coin_y = coin.position.y
+    //     let player_x = player.position.x
+    //     let player_y = player.position.y
+    //     if (player_x + player.width >= coin_x && player_x <= coin_x + coin.width && player_y + player.height >= coin_y && player_y <= coin_y + coin.height){
+    //         score ++
+    //     }
+    //   });
+    drawScore()      
+}
 
 
 
@@ -163,14 +196,25 @@ const keys = {
 let count = 0
 
 function animate() {
-    count++
-    console.log(count)
     requestAnimationFrame(animate)
     context.clearRect(0, 0, canvas.width, canvas.height)
     background.draw()
     player.update()
-    coin.draw()
+
+
+    // for generating coins at random intervals
+    for (let i = 0; i < coins.length; i++ ) {
+        coins[i].draw()
+        coins[i].move()
+    }
+    
+    if (Math.random() > 0.98) {
+        coins.push(new Coin(coinImg))
+    }
+    // Keep only those coins that are in frame
+    coins = coins.filter(item => (item.position.x > 0));
     //coin.move()
+     // for generating obstacles at random intervals
     for (let i = 0; i < obstacles.length; i++) {
         obstacles[i].draw()
         obstacles[i].move()
@@ -179,7 +223,9 @@ function animate() {
     if (Math.random() > 0.99) {
       obstacles.push(new Obstacle(demon1Img))
     }
-    
+    obstacles = obstacles.filter(item => (item.position.x > 0));
+
+    collisionDetection()
     
 }
 
