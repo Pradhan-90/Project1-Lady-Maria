@@ -41,6 +41,12 @@ class Player {
             this.velocity.y += gravity} 
         else {
             this.velocity.y = 0
+            if (keys.right.pressed) {
+                background.move(5)
+            } else if (keys.left.pressed) {
+                background.move(-5)
+            }
+            
         }
 
     }
@@ -48,6 +54,8 @@ class Player {
 
 
 const player = new Player()
+
+let scrolloffset = 0
 
 class Background {
     constructor(x, y, image) {
@@ -62,6 +70,18 @@ class Background {
     
     draw() {
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
+        context.drawImage(this.image, this.position.x+this.width, this.position.y, this.width, this.height)
+    }
+
+    move(num) {
+        background.position.x += num
+        //background position x is always 0 or less
+        if (background.position.x > 0) {
+            background.position.x -= this.width
+        } 
+         if(background.position.x < -this.width) {
+             background.position.x += this.width
+         }
     }
 }
 const background = new Background(0, 0, backgroundImg);
@@ -78,16 +98,17 @@ const background = new Background(0, 0, backgroundImg);
 
   
 
-// const keys = {
-//     left : {
-//         pressed: false
-//     },
-//     right : {
-//         pressed: false
-//     },
-//     up : {
-//         pressed: false
-//     }
+const keys = {
+    left : {
+        pressed: false
+    },
+    right : {
+        pressed: false
+    },
+    up : {
+        pressed: false
+    }
+}
 
 
 
@@ -113,11 +134,13 @@ addEventListener('keydown', function (event) {
         case 'ArrowRight':
            if(player.velocity.x === 0)
             player.velocity.x +=  3
+            keys.right.pressed = true
             break
 
         case 'ArrowLeft':
            if(player.velocity.x === 0)
            player.velocity.x -= 3
+           keys.left.pressed = true
             break
     }   
 })
@@ -129,13 +152,13 @@ addEventListener('keyup', function (event) {
            break
 
         case 'ArrowRight':
-            // keys.right.pressed = false
             player.velocity.x =  0
+            keys.right.pressed = false
             break
 
         case 'ArrowLeft':
-            // keys.left.pressed = false
             player.velocity.x = 0
+            keys.left.pressed = false
             break
     }   
 })
