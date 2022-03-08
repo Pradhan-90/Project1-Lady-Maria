@@ -4,16 +4,22 @@ const context = canvas.getContext('2d')
 const mariaImg = new Image()
 mariaImg.src = ('./images/Girlrun.png')
 const backgroundImg = new Image()
-backgroundImg.src = ('./images/backgroundImg1.jpg')
-let gamespeed = 2
+backgroundImg.src = ('./images/background3.jpg')
+const coinImg = new Image()
+coinImg.src = ('./images/—Pngtree—golden\ coin\ money\ gold_6424143.png')
+const demon1Img = new Image()
+demon1Img.src = ('./images/demon2.png')
+
 
 //canvas.width = innerWidth 
 // canvas.height = innerHeight
 
 const gravity = 0.5
 
+//created player here
+
 class Player {
-    constructor() {
+    constructor(x, y, image) {
         this.position = {
             x: 100,
             y: 100
@@ -22,12 +28,14 @@ class Player {
             x: 0,
             y: 0
         }
-        this.width = 30,
-        this.height = 30
+        this.width = 100,
+        this.height = 150
+        this.image = image
     }
 
     draw() {
-        context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        //context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
     }
 
     update() {
@@ -42,9 +50,9 @@ class Player {
         else {
             this.velocity.y = 0
             if (keys.right.pressed) {
-                background.move(5)
-            } else if (keys.left.pressed) {
                 background.move(-5)
+            } else if (keys.left.pressed) {
+                background.move(5)
             }
             
         }
@@ -53,9 +61,8 @@ class Player {
 }
 
 
-const player = new Player()
+const player = new Player(0, 0, mariaImg)
 
-let scrolloffset = 0
 
 class Background {
     constructor(x, y, image) {
@@ -86,17 +93,58 @@ class Background {
 }
 const background = new Background(0, 0, backgroundImg);
 
-// function handleBackground () {
-//     // if(background.x1 <= -background.width){
+class Coin {
+    constructor(x, y, image) {
+        this.position = {
+            x: x,
+            y: y
+        } 
 
-//     //     background.x2 = background.width
-//     // } else {
-//     //     background.x1 -= gamespeed
-//     // }
-//     context.draw(backgroundImg, background.x1, background.y, background.width, background.height)
-// }
+        this.image = image
+        this.width = 75
+        this.height = 75
+    }
 
-  
+    draw() {
+        context.drawImage(this.image, this.position.x, this.position.y,this.width, this.height)    
+    }
+
+    update() {
+        this.draw()
+    
+        
+    }
+}
+const coin = new Coin(0, 0, coinImg);
+
+class Obstacle {
+    constructor(x, y, image) {
+        this.position = {
+            x: 500,
+            y: 160
+        } 
+
+        this.image = image
+        this.width = 200
+        this.height = 200
+
+    }
+
+    draw() {
+        //context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        context.drawImage(this.image, this.position.x, this.position.y,this.width, this.height) 
+    }
+
+    update() {
+        this.draw()   
+    }
+}
+
+const obstacle = new Obstacle(0, 0, demon1Img)
+
+
+
+
 
 const keys = {
     left : {
@@ -117,6 +165,10 @@ function animate() {
     context.clearRect(0, 0, canvas.width, canvas.height)
     background.draw()
     player.update()
+    coin.update()
+    obstacle.update()
+    
+    
 }
 
 animate()
