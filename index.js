@@ -150,8 +150,8 @@ class Obstacle {
         } 
 
         this.image = image
-        this.width = 200
-        this.height = 200
+        this.width = 75
+        this.height = 75
 
     }
 
