@@ -11,13 +11,12 @@ const coinImg = new Image()
 coinImg.src = ('./images/—Pngtree—golden\ coin\ money\ gold_6424143.png')
 const demon1Img = new Image()
 demon1Img.src = ('./images/demon2.png')
-// const demon2Img = new Image()
-// demon2Img.src = './images/2demon1.png'
 
-
+let playerAlive = true
 const gravity = 0.5
 
 //created player here
+//Audio.loop = true for the continue sound of in the game
 
 class Player {
     constructor(x, y, image) {
@@ -40,17 +39,17 @@ class Player {
     }
      
     //stops the player from moving after collision with obstacle
-    freeze() {
-        this.velocity.x = 0
-        this.velocity.y = 0
-        removeEventListener('keyup',handelKeyUp)
-        removeEventListener('keydown', handelKeyDown)
-    }
+    // freeze() {
+    //     this.velocity.x = 0
+    //     this.velocity.y = 0
+    //     removeEventListener('keyup',handelKeyUp)
+    //     removeEventListener('keydown', handelKeyDown)
+    // }
 
     update() {
         this.draw()
         const newPosition = this.position.x + this.velocity.x
-        if(newPosition > 0 && newPosition < 2*canvasWidth/3 ) {
+        if(newPosition > 0 && newPosition < 2*canvasWidth/4 ) {
             this.position.x = newPosition
         }
         this.position.y += this.velocity.y
@@ -100,12 +99,12 @@ class Background {
     }
     
     // stops the background from moving after collision with obstacle
-    freeze() {
-        this.position.x = 0
-        this.position.y = 0
-        removeEventListener('keyup',handelKeyUp)
-        removeEventListener('keydown', handelKeyDown)
-    }
+    // freeze() {
+    //     this.position.x = 0
+    //     this.position.y = 0
+    //     removeEventListener('keyup',handelKeyUp)
+    //     removeEventListener('keydown', handelKeyDown)
+    // }
 
     move(num) {
         background.position.x += num
@@ -138,6 +137,7 @@ class Coin {
 
     move(){
         this.position.x -= 4 //to move coin in opposite direction
+        
     }
 }
 let coins = [new Coin(coinImg)];
@@ -164,12 +164,12 @@ class Obstacle {
         this.position.x -= 4
     }
 
-    freeze() {
-        this.position.x = 0
-        this.position.y = 0
-        removeEventListener('keyup',handelKeyUp)
-        removeEventListener('keydown', handelKeyDown)
-    }
+    // freeze() {
+    //     this.position.x = 0
+    //     this.position.y = 0
+    //     removeEventListener('keyup',handelKeyUp)
+    //     removeEventListener('keydown', handelKeyDown)
+    // }
      
 }
 
@@ -177,7 +177,7 @@ let obstacles = [new Obstacle(demon1Img)]
 
 let score = 0
 function drawScore() {
-    context.font = "16px Arial";
+    context.font = "20px Arial";
     context.fillStyle = "#FFFFFF";
     context.fillText("Score: "+score, 8, 20);
 }
@@ -194,11 +194,14 @@ function collideWithPlayer(a) {
     }
 }
 
+const coinAudio = document.querySelector('.coin')
+
 function collisionWithCoin() {
     for (let x=0; x < coins.length; x++) {
         let coin = coins[x];
         if (collideWithPlayer(coin)) {
             score ++;
+            coinAudio.play()
             coins.splice(x, 1);
             break;
         }
@@ -206,19 +209,20 @@ function collisionWithCoin() {
     drawScore()      
 }
 
+const gameOverAudio = document.querySelector('.gameOver')
 function gameOver() {
-    context.font = "50px Arial";
+    context.font = "55px Arial";
     context.fillStyle = "#FFFFFF";
-    context.fillText("Game Over ", 300, 200);
-    player.freeze()
-    background.freeze()
-    //obstacles.freeze()
+    context.fillText("Game Over ", 490, 250);
+    gameOverAudio.play()
+    //console.log(gameOverAudio)
 }
 
 function collisionWithObstacle() {
     for (let x=0; x < obstacles.length; x++) {
         let obstacle = obstacles[x];
         if (collideWithPlayer(obstacle)) {
+            playerAlive = false
             gameOver()
             break;
         }
@@ -239,10 +243,11 @@ const keys = {
     }
 }
 
-let count = 0
 
 function animate() {
+    if(playerAlive === true)
     requestAnimationFrame(animate)
+
     context.clearRect(0, 0, canvas.width, canvas.height)
     background.draw()
     player.update()
@@ -257,15 +262,15 @@ function animate() {
     if (Math.random() > 0.98) {
         coins.push(new Coin(coinImg))
     }
-    // Keep only those coins that are in frame
-    coins = coins.filter(item => (item.position.x > 0));
-     // for generating obstacles at random intervals
-    for (let i = 0; i < obstacles.length; i++) {
+    
+    coins = coins.filter(item => (item.position.x > 0));  // Keep only those coins that are in frame
+    
+    for (let i = 0; i < obstacles.length; i++) {   // for generating obstacles at random intervals
         obstacles[i].draw()
         obstacles[i].move()
     }
     
-    if (Math.random() > 0.995) {
+    if (Math.random() > 0.998) {
       obstacles.push(new Obstacle(demon1Img))
     }
     obstacles = obstacles.filter(item => (item.position.x > 0)); //to remove obstacles those are out of frame
@@ -285,7 +290,6 @@ function handelKeyDown(event){
            player.velocity.y -= 20
            background.draw()
            keys.up.pressed = true
-
            break
 
         case 'ArrowRight':
