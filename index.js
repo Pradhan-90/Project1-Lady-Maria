@@ -1,6 +1,8 @@
 const canvas = document.querySelector('#canvas')
 const canvasWidth = 1200
 const context = canvas.getContext('2d')
+
+
 const mariaImg = new Image()
 mariaImg.src = ('./images/Girlrun.png')
 const backgroundImg = new Image()
@@ -9,12 +11,9 @@ const coinImg = new Image()
 coinImg.src = ('./images/—Pngtree—golden\ coin\ money\ gold_6424143.png')
 const demon1Img = new Image()
 demon1Img.src = ('./images/demon2.png')
-const demon2Img = new Image()
-demon2Img.src = './images/2demon1.png'
+// const demon2Img = new Image()
+// demon2Img.src = './images/2demon1.png'
 
-
-//canvas.width = innerWidth 
-// canvas.height = innerHeight
 
 const gravity = 0.5
 
@@ -39,8 +38,14 @@ class Player {
         //context.fillRect(this.position.x, this.position.y, this.width, this.height)
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
     }
-
-
+     
+    //stops the player from moving after collision with obstacle
+    freeze() {
+        this.velocity.x = 0
+        this.velocity.y = 0
+        removeEventListener('keyup',handelKeyUp)
+        removeEventListener('keydown', handelKeyDown)
+    }
 
     update() {
         this.draw()
@@ -53,14 +58,23 @@ class Player {
             this.velocity.y += gravity} 
         else {
             this.velocity.y = 0
-            if (keys.right.pressed) {
-                background.move(-5)
-                //obstacle.move(-5)
-            } else if (keys.left.pressed) {
-                background.move(5)
-            }
+            // if (keys.right.pressed || keys.up.pressed ) {
+            //     console.log(keys.up.pressed)
+            //     background.move(-5)
+            //     //obstacle.move(-5)
+            // } else if (keys.left.pressed) {
+            //     background.move(5)
+            // }
             
         }
+        if (keys.right.pressed || keys.up.pressed ) {
+            console.log(keys.up.pressed)
+            background.move(-5)
+            //obstacle.move(-5)
+        } else if (keys.left.pressed) {
+            background.move(5)
+        }
+       
 
     }
 }
@@ -83,6 +97,14 @@ class Background {
     draw() {
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
         context.drawImage(this.image, this.position.x+this.width, this.position.y, this.width, this.height)
+    }
+    
+    // stops the background from moving after collision with obstacle
+    freeze() {
+        this.position.x = 0
+        this.position.y = 0
+        removeEventListener('keyup',handelKeyUp)
+        removeEventListener('keydown', handelKeyDown)
     }
 
     move(num) {
@@ -141,6 +163,13 @@ class Obstacle {
     move(){
         this.position.x -= 4
     }
+
+    freeze() {
+        this.position.x = 0
+        this.position.y = 0
+        removeEventListener('keyup',handelKeyUp)
+        removeEventListener('keydown', handelKeyDown)
+    }
      
 }
 
@@ -149,7 +178,7 @@ let obstacles = [new Obstacle(demon1Img)]
 let score = 0
 function drawScore() {
     context.font = "16px Arial";
-    context.fillStyle = "#0095DD";
+    context.fillStyle = "#FFFFFF";
     context.fillText("Score: "+score, 8, 20);
 }
 
@@ -164,7 +193,7 @@ function collideWithPlayer(a) {
         return false
     }
 }
-//
+
 function collisionWithCoin() {
     for (let x=0; x < coins.length; x++) {
         let coin = coins[x];
@@ -178,9 +207,12 @@ function collisionWithCoin() {
 }
 
 function gameOver() {
-    context.font = "16px Arial";
-    context.fillStyle = "#0095DD";
+    context.font = "50px Arial";
+    context.fillStyle = "#FFFFFF";
     context.fillText("Game Over ", 300, 200);
+    player.freeze()
+    background.freeze()
+    //obstacles.freeze()
 }
 
 function collisionWithObstacle() {
@@ -233,7 +265,7 @@ function animate() {
         obstacles[i].move()
     }
     
-    if (Math.random() > 0.99) {
+    if (Math.random() > 0.995) {
       obstacles.push(new Obstacle(demon1Img))
     }
     obstacles = obstacles.filter(item => (item.position.x > 0)); //to remove obstacles those are out of frame
@@ -246,13 +278,13 @@ function animate() {
 
 animate()
 
-addEventListener('keydown', function (event) {
-    console.log(event.key)
+function handelKeyDown(event){
     switch (event.key) {
         case'ArrowUp':
            if(player.velocity.y === 0)
            player.velocity.y -= 20
            background.draw()
+           keys.up.pressed = true
 
            break
 
@@ -267,26 +299,74 @@ addEventListener('keydown', function (event) {
            player.velocity.x -= 3
            keys.left.pressed = true
             break
-    }   
-})
+    }
+}
 
-addEventListener('keyup', function (event) {
-     switch (event.key) {
-         case'ArrowUp':
-           player.velocity.y = 0
-           break
+addEventListener('keydown', handelKeyDown)
 
-        case 'ArrowRight':
-            player.velocity.x =  0
-            keys.right.pressed = false
-            break
+// addEventListener('keydown', function (event) {
+//     switch (event.key) {
+//         case'ArrowUp':
+//            if(player.velocity.y === 0)
+//            player.velocity.y -= 20
+//            background.draw()
+//            keys.up.pressed = true
 
-        case 'ArrowLeft':
-            player.velocity.x = 0
-            keys.left.pressed = false
-            break
-    }   
-})
+//            break
+
+//         case 'ArrowRight':
+//            if(player.velocity.x === 0)
+//             player.velocity.x +=  3
+//             keys.right.pressed = true
+//             break
+
+//         case 'ArrowLeft':
+//            if(player.velocity.x === 0)
+//            player.velocity.x -= 3
+//            keys.left.pressed = true
+//             break
+//     }   
+// })
+
+
+function handelKeyUp(event) {
+        switch (event.key) {
+            case'ArrowUp':
+              player.velocity.y = 0
+              keys.up.pressed = false
+              break
+   
+           case 'ArrowRight':
+               player.velocity.x =  0
+               keys.right.pressed = false
+               break
+   
+           case 'ArrowLeft':
+               player.velocity.x = 0
+               keys.left.pressed = false
+               break
+       }   
+}
+addEventListener('keyup', handelKeyUp)
+
+// addEventListener('keyup', function (event) {
+//      switch (event.key) {
+//          case'ArrowUp':
+//            player.velocity.y = 0
+//            keys.up.pressed = false
+//            break
+
+//         case 'ArrowRight':
+//             player.velocity.x =  0
+//             keys.right.pressed = false
+//             break
+
+//         case 'ArrowLeft':
+//             player.velocity.x = 0
+//             keys.left.pressed = false
+//             break
+//     }   
+//})
 
 
 
