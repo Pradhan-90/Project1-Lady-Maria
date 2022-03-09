@@ -2,6 +2,29 @@ const canvas = document.querySelector('#canvas')
 const canvasWidth = 1200
 const context = canvas.getContext('2d')
 
+//for start popup
+const startbutton = document.querySelector('#start');
+const popUp = document.querySelector('section.popUp');
+
+const startAudio = document.querySelector('.gamePlay')
+//startAudio.loop = true
+startbutton.addEventListener('click', function(event){
+    popUp.classList.add('hidden')
+    // if(playerAlive === true){
+    //     startAudio.play()
+    // }
+     animate()
+ })
+
+// popUp.addEventListener('click', function(){
+//     popUp.classList.add('hidden')
+// })
+
+
+
+// startgame
+
+
 
 const mariaImg = new Image()
 mariaImg.src = ('./images/Girlrun.png')
@@ -12,7 +35,7 @@ coinImg.src = ('./images/—Pngtree—golden\ coin\ money\ gold_6424143.png')
 const demon1Img = new Image()
 demon1Img.src = ('./images/demon2.png')
 
-let playerAlive = true
+let playerAlive = true //if this condition is false, animation stops
 const gravity = 0.5
 
 //created player here
@@ -37,14 +60,6 @@ class Player {
         //context.fillRect(this.position.x, this.position.y, this.width, this.height)
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
     }
-     
-    //stops the player from moving after collision with obstacle
-    // freeze() {
-    //     this.velocity.x = 0
-    //     this.velocity.y = 0
-    //     removeEventListener('keyup',handelKeyUp)
-    //     removeEventListener('keydown', handelKeyDown)
-    // }
 
     update() {
         this.draw()
@@ -67,14 +82,11 @@ class Player {
             
         }
         if (keys.right.pressed || keys.up.pressed ) {
-            console.log(keys.up.pressed)
             background.move(-5)
             //obstacle.move(-5)
         } else if (keys.left.pressed) {
             background.move(5)
-        }
-       
-
+        }  
     }
 }
 
@@ -97,14 +109,6 @@ class Background {
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
         context.drawImage(this.image, this.position.x+this.width, this.position.y, this.width, this.height)
     }
-    
-    // stops the background from moving after collision with obstacle
-    // freeze() {
-    //     this.position.x = 0
-    //     this.position.y = 0
-    //     removeEventListener('keyup',handelKeyUp)
-    //     removeEventListener('keydown', handelKeyDown)
-    // }
 
     move(num) {
         background.position.x += num
@@ -140,6 +144,7 @@ class Coin {
         
     }
 }
+
 let coins = [new Coin(coinImg)];
 
 class Obstacle {
@@ -164,13 +169,6 @@ class Obstacle {
         this.position.x -= 4
     }
 
-    // freeze() {
-    //     this.position.x = 0
-    //     this.position.y = 0
-    //     removeEventListener('keyup',handelKeyUp)
-    //     removeEventListener('keydown', handelKeyDown)
-    // }
-     
 }
 
 let obstacles = [new Obstacle(demon1Img)]
@@ -245,44 +243,44 @@ const keys = {
 
 
 function animate() {
-    if(playerAlive === true)
-    requestAnimationFrame(animate)
-
-    context.clearRect(0, 0, canvas.width, canvas.height)
-    background.draw()
-    player.update()
-
-
-    // for generating coins at random intervals
-    for (let i = 0; i < coins.length; i++ ) {
-        coins[i].draw()
-        coins[i].move()
-    }
-    
-    if (Math.random() > 0.98) {
-        coins.push(new Coin(coinImg))
-    }
-    
-    coins = coins.filter(item => (item.position.x > 0));  // Keep only those coins that are in frame
-    
-    for (let i = 0; i < obstacles.length; i++) {   // for generating obstacles at random intervals
-        obstacles[i].draw()
-        obstacles[i].move()
-    }
-    
-    if (Math.random() > 0.998) {
-      obstacles.push(new Obstacle(demon1Img))
-    }
-    obstacles = obstacles.filter(item => (item.position.x > 0)); //to remove obstacles those are out of frame
-
-    collisionWithCoin()
-
-    collisionWithObstacle()
+       if(playerAlive === true)
+        requestAnimationFrame(animate)
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        background.draw()
+        player.update()
+        
+        
+        // for generating coins at random intervals
+        for (let i = 0; i < coins.length; i++ ) {
+            coins[i].draw()
+            coins[i].move()
+        }
+        
+        if (Math.random() > 0.98) {
+            coins.push(new Coin(coinImg))
+        }
+        
+        coins = coins.filter(item => (item.position.x > 0));  // Keep only those coins that are in frame
+        
+        for (let i = 0; i < obstacles.length; i++) {   // for generating obstacles at random intervals
+            obstacles[i].draw()
+            obstacles[i].move()
+        }
+        
+        if (Math.random() > 0.995) {
+            obstacles.push(new Obstacle(demon1Img))
+        }
+        obstacles = obstacles.filter(item => (item.position.x > 0)); //to remove obstacles those are out of frame
+        
+        collisionWithCoin()
+        
+        collisionWithObstacle()
     
 }
 
-animate()
-
+//animate() //to draw everything on canvas
+ 
+//for moving player and added eventlistener
 function handelKeyDown(event){
     switch (event.key) {
         case'ArrowUp':
@@ -308,31 +306,6 @@ function handelKeyDown(event){
 
 addEventListener('keydown', handelKeyDown)
 
-// addEventListener('keydown', function (event) {
-//     switch (event.key) {
-//         case'ArrowUp':
-//            if(player.velocity.y === 0)
-//            player.velocity.y -= 20
-//            background.draw()
-//            keys.up.pressed = true
-
-//            break
-
-//         case 'ArrowRight':
-//            if(player.velocity.x === 0)
-//             player.velocity.x +=  3
-//             keys.right.pressed = true
-//             break
-
-//         case 'ArrowLeft':
-//            if(player.velocity.x === 0)
-//            player.velocity.x -= 3
-//            keys.left.pressed = true
-//             break
-//     }   
-// })
-
-
 function handelKeyUp(event) {
         switch (event.key) {
             case'ArrowUp':
@@ -353,24 +326,6 @@ function handelKeyUp(event) {
 }
 addEventListener('keyup', handelKeyUp)
 
-// addEventListener('keyup', function (event) {
-//      switch (event.key) {
-//          case'ArrowUp':
-//            player.velocity.y = 0
-//            keys.up.pressed = false
-//            break
-
-//         case 'ArrowRight':
-//             player.velocity.x =  0
-//             keys.right.pressed = false
-//             break
-
-//         case 'ArrowLeft':
-//             player.velocity.x = 0
-//             keys.left.pressed = false
-//             break
-//     }   
-//})
 
 
 

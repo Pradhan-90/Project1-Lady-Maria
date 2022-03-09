@@ -1,13 +1,78 @@
 *{
     margin: O;
+    box-sizing: border-box;
 }
 
 body{
-    background-color: rgb(235, 179, 235);
+    /* background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);; */
+    background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
 }
 
 canvas{
-    border: 2px solid rgb(230, 222, 222);
+    /* border: 2px solid rgb(105, 11, 212); */
     /* background-image: url(''); */
+    box-shadow: #330867;
+}
+
+h1,
+p {
+    font-size: 45px; 
+    color: white;
+    text-align: center;
+}
+section {
+  /* height: 300px;
+   width: 100%; */
+   display: flex;
+   justify-content: center;
+}
+section.game {
+   border: 2px solid blue; 
+   background-size: cover;
+   margin-bottom: 2em;
+   position: relative;
+}
+section.popUp {
+   /* border: 2px solid rgb(235, 129, 217); */
+   /* background-color: rgba(255, 255, 255, 0.5); */
+   background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);
+   position: absolute;
+   top:  85px;
+   bottom: 0;
+   right: 82px;
+   height: 500px;
+   width: 1200px;
+   border-radius: 30px;
+}
+.popUpContent {
+   margin: auto;
+   height: 50%;
+   width: 50%;
+   border: 2px solid rgb(99, 24, 68);
+   background-image: linear-gradient(-225deg, #22E1FF 0%, #1D8FE1 48%, #625EB1 100%);
+   border-radius: 30px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.start {
+   text-align: center;
+}
+
+section.popUp.hidden {
+   display: none;
+}
+
+.start{
+    height: 50px;
+    width: 100px;
+    background-color: rgb(238, 142, 209);
+    font-weight: bold;
+    color: antiquewhite;
+}
+
+.start:hover{
+    color: purple;
 }
 
