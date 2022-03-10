@@ -17,6 +17,9 @@ function startGame() {
              playerAlive = true
              coins = []
              obstacles = []
+             score = 0
+             player.position.x = 100
+             player.position.y = 100
              animate()
 }
 
@@ -263,7 +266,7 @@ function animate() {
             obstacles[i].move()
         }
         
-        if (Math.random() > 0.995) {
+        if (Math.random() > 0.99) {
             obstacles.push(new Obstacle(demon1Img))
         }
         obstacles = obstacles.filter(item => (item.position.x > 0)); //to remove obstacles those are out of frame
