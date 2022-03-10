@@ -3,16 +3,27 @@ const canvasWidth = 1200
 const context = canvas.getContext('2d')
 
 //for start popup
-const startbutton = document.querySelector('#start');
-const popUp = document.querySelector('section.popUp');
+const startbutton = document.querySelector('#start')
+const popUp = document.querySelector('section.popUp')
+
+const restartbutton = document.querySelector('.restart')
 
 const startAudio = document.querySelector('.gamePlay')
 startAudio.loop = true
-startbutton.addEventListener('click', function(event){
-    popUp.classList.add('hidden')
-         startAudio.play()
-         animate()
- })
+function startGame() {
+        popUp.classList.add('hidden')
+        restartbutton.classList.remove('active')
+             startAudio.play()
+             playerAlive = true
+             coins = []
+             obstacles = []
+             animate()
+}
+
+startbutton.addEventListener('click', startGame)
+restartbutton.addEventListener('click', startGame)
+
+
 
 // startgame
 
@@ -197,13 +208,11 @@ function gameOver() {
     context.fillRect(435, 150, 310, 50)
     context.fillStyle = "#330867";
     context.fillText("Game Over ", 460, 195);
-    context.font = "55px Ropa Sans";
-    context.fillStyle = "#C9E0EC";
-    context.fillRect(435, 300, 310, 50)
-    context.fillStyle = "#330867";
-    context.fillText("Restart ", 510, 340);
-    addEventListener(click, restart)
+    // restartbutton.style.display='block'
+    restartbutton.classList.add('active')
 }
+
+
 
 function collisionWithObstacle() {
     for (let x=0; x < obstacles.length; x++) {
@@ -230,7 +239,7 @@ const keys = {
 
 
 function animate() {
-       if(playerAlive === true)
+    if(playerAlive)
         requestAnimationFrame(animate)
         context.clearRect(0, 0, canvas.width, canvas.height)
         background.draw()

@@ -105,4 +105,20 @@ section.popUp.hidden {
   }
 }
 
+.restart{
+     /* visibility: hidden;  */
+     display: none;
+     position: absolute;
+     top: 350px;
+     right: 584px;
+     width: 200px;
+     height: 50px;
+     font-family: Ropa sans;
+     font-size: 40px;
+     background-color: #C9E0EC;
+     color: #330867;
+ }
 
+.restart.active{
+    display: block;
+}
