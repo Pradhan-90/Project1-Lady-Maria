@@ -7,24 +7,14 @@ const startbutton = document.querySelector('#start');
 const popUp = document.querySelector('section.popUp');
 
 const startAudio = document.querySelector('.gamePlay')
-//startAudio.loop = true
+startAudio.loop = true
 startbutton.addEventListener('click', function(event){
     popUp.classList.add('hidden')
-    // if(playerAlive === true){
-    //     startAudio.play()
-    // }
-     animate()
+         startAudio.play()
+         animate()
  })
 
-// popUp.addEventListener('click', function(){
-//     popUp.classList.add('hidden')
-// })
-
-
-
 // startgame
-
-
 
 const mariaImg = new Image()
 mariaImg.src = ('./images/Girlrun.png')
@@ -39,7 +29,6 @@ let playerAlive = true //if this condition is false, animation stops
 const gravity = 0.5
 
 //created player here
-//Audio.loop = true for the continue sound of in the game
 
 class Player {
     constructor(x, y, image) {
@@ -71,15 +60,7 @@ class Player {
         if(this.position.y + this.height + this.velocity.y <= canvas.height) {
             this.velocity.y += gravity} 
         else {
-            this.velocity.y = 0
-            // if (keys.right.pressed || keys.up.pressed ) {
-            //     console.log(keys.up.pressed)
-            //     background.move(-5)
-            //     //obstacle.move(-5)
-            // } else if (keys.left.pressed) {
-            //     background.move(5)
-            // }
-            
+            this.velocity.y = 0    
         }
         if (keys.right.pressed || keys.up.pressed ) {
             background.move(-5)
@@ -209,11 +190,19 @@ function collisionWithCoin() {
 
 const gameOverAudio = document.querySelector('.gameOver')
 function gameOver() {
-    context.font = "55px Arial";
-    context.fillStyle = "#FFFFFF";
-    context.fillText("Game Over ", 490, 250);
+    startAudio.pause()
     gameOverAudio.play()
-    //console.log(gameOverAudio)
+    context.font = "55px Ropa Sans";
+    context.fillStyle = "#C9E0EC";
+    context.fillRect(435, 150, 310, 50)
+    context.fillStyle = "#330867";
+    context.fillText("Game Over ", 460, 195);
+    context.font = "55px Ropa Sans";
+    context.fillStyle = "#C9E0EC";
+    context.fillRect(435, 300, 310, 50)
+    context.fillStyle = "#330867";
+    context.fillText("Restart ", 510, 340);
+    addEventListener(click, restart)
 }
 
 function collisionWithObstacle() {
@@ -226,8 +215,6 @@ function collisionWithObstacle() {
         }
     }   
 }
-
-
 
 const keys = {
     left : {

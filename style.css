@@ -1,33 +1,35 @@
+
+
 *{
     margin: O;
     box-sizing: border-box;
 }
 
 body{
-    /* background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);; */
-    background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+    /* background-color: #a696e3; */
+    background-color: #d0c9eb;
 }
 
 canvas{
     /* border: 2px solid rgb(105, 11, 212); */
     /* background-image: url(''); */
-    box-shadow: #330867;
+    box-shadow: #5D3FD3;
 }
 
 h1,
 p {
+    font-family: Ropa sans;
     font-size: 45px; 
-    color: white;
+    color: #5D3FD3;
     text-align: center;
 }
+
 section {
-  /* height: 300px;
-   width: 100%; */
    display: flex;
    justify-content: center;
 }
 section.game {
-   border: 2px solid blue; 
+   /* border: 2px solid blue;  */
    background-size: cover;
    margin-bottom: 2em;
    position: relative;
@@ -35,16 +37,18 @@ section.game {
 section.popUp {
    /* border: 2px solid rgb(235, 129, 217); */
    /* background-color: rgba(255, 255, 255, 0.5); */
-   background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);
+   background-color: #5D3FD3;
+   background-image: url("./images/background.popup.jpg");
+   background-size: cover;
    position: absolute;
    top:  85px;
    bottom: 0;
    right: 82px;
    height: 500px;
    width: 1200px;
-   border-radius: 30px;
+   border-radius: 30px; 
 }
-.popUpContent {
+/* .popUpContent {
    margin: auto;
    height: 50%;
    width: 50%;
@@ -54,10 +58,15 @@ section.popUp {
    display: flex;
    justify-content: center;
    align-items: center;
-}
+} */
 
 .start {
    text-align: center;
+   /* display: flex; */
+   position: absolute;
+   top: 230px;
+   left: 550px;
+
 }
 
 section.popUp.hidden {
@@ -67,7 +76,7 @@ section.popUp.hidden {
 .start{
     height: 50px;
     width: 100px;
-    background-color: rgb(238, 142, 209);
+    background-color: #ff0082;
     font-weight: bold;
     color: antiquewhite;
 }
@@ -75,4 +84,25 @@ section.popUp.hidden {
 .start:hover{
     color: purple;
 }
+
+.start {
+
+    animation: opacity 2s ease-in-out infinite;
+    opacity: 1;
+}
+
+@keyframes opacity {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 
