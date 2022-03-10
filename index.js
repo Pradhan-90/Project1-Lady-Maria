@@ -60,14 +60,13 @@ class Player {
     }
 
     draw() {
-        //context.fillRect(this.position.x, this.position.y, this.width, this.height)
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
     }
 
     update() {
         this.draw()
         const newPosition = this.position.x + this.velocity.x
-        if(newPosition > 0 && newPosition < 2*canvasWidth/4 ) {
+        if(newPosition > 0 && newPosition < canvasWidth/2 ) {
             this.position.x = newPosition
         }
         this.position.y += this.velocity.y
@@ -78,7 +77,6 @@ class Player {
         }
         if (keys.right.pressed || keys.up.pressed ) {
             background.move(-5)
-            //obstacle.move(-5)
         } else if (keys.left.pressed) {
             background.move(5)
         }  
@@ -156,7 +154,6 @@ class Obstacle {
     }
 
     draw() {
-        //context.fillRect(this.position.x, this.position.y, this.width, this.height)
         context.drawImage(this.image, this.position.x, this.position.y,this.width, this.height) 
     }
 
@@ -191,7 +188,7 @@ const coinAudio = document.querySelector('.coin')
 
 function collisionWithCoin() {
     for (let x=0; x < coins.length; x++) {
-        let coin = coins[x];
+        let coin = coins[x]; 
         if (collideWithPlayer(coin)) {
             score ++;
             coinAudio.play()
@@ -266,7 +263,7 @@ function animate() {
             obstacles[i].move()
         }
         
-        if (Math.random() > 0.99) {
+        if (Math.random() > 0.995) {
             obstacles.push(new Obstacle(demon1Img))
         }
         obstacles = obstacles.filter(item => (item.position.x > 0)); //to remove obstacles those are out of frame
